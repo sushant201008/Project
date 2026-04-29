@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Yatra | Plan, Travel, Share</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --light: #f4f7f6;
+            --dark-blue: #1a252f;
+            --gray: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--light);
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1524492459423-5c2c045780bb?q=80&w=2000') no-repeat center/cover;
+            color: white;
+            padding: 120px 20px;
+            text-align: center;
+        }
+
+        header h1 { margin: 0; font-size: 3.5rem; text-transform: uppercase; letter-spacing: 3px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin: 50px 0 40px;
+            color: var(--primary);
+            position: relative;
+        }
+
+        h2.section-title::after {
+            content: ''; width: 50px; height: 3px; background: var(--accent);
+            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+        }
+
+        /* Trip Grid */
+        .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .trip-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .trip-card:hover { transform: translateY(-8px); }
+        .trip-card img { width: 100%; height: 200px; object-fit: cover; }
+        .trip-info { padding: 15px; }
+        .badge { background: var(--accent); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: bold; }
+
+        /* Feedback Section */
+        .feedback-section { background: #fff; padding: 40px 0; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .testimonial-card { background: var(--light); padding: 25px; border-radius: 10px; font-style: italic; position: relative; }
+        .testimonial-card::before { content: '"'; font-size: 4rem; color: var(--accent); opacity: 0.2; position: absolute; top: -10px; left: 10px; }
+        .user-name { display: block; margin-top: 15px; font-weight: bold; font-style: normal; color: var(--primary); }
+
+        /* Contact Section */
+        .contact-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .contact-info h3 { color: var(--primary); }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit;
+        }
+        .submit-btn { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .submit-btn:hover { background: var(--dark-blue); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 600px; border-radius: 15px; position: relative; padding: 30px; }
+        .close-btn { position: absolute; right: 20px; top: 10px; font-size: 30px; cursor: pointer; }
+
+        footer { background: var(--dark-blue); color: white; text-align: center; padding: 30px; margin-top: 60px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bharat Yatra</h1>
+        <p>Explore the Soul of India</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Popular Destinations</h2>
+        <div class="trip-grid" id="tripGrid"></div>
+
+        <h2 class="section-title">What Travelers Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                "Our trip to Srinagar was magical. The houseboat stay recommended by Bharat Yatra was the highlight of our honeymoon!"
+                <span class="user-name">- Rahul & Priya, Delhi</span>
+            </div>
+            <div class="testimonial-card">
+                "The Kedarnath trek guide details were spot on. I felt prepared for the altitude thanks to their blog posts."
+                <span class="user-name">- Amit Sharma, Mumbai</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">Plan Your Custom Trip</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Contact Us</h3>
+                <p>📍  Vadodara, India</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ support@bharatyatra.com</p>
+                <p>Working Hours: 9:00 AM - 10:00 PM</p>
+            </div>
+            <form class="contact-form" id="contactForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <textarea rows="5" placeholder="Which destination are you interested in?" required></textarea>
+                <button type="submit" class="submit-btn">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="tripModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <div id="modalData"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Bharat Yatra Planner. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Trip Data
+        const trips = [
+            { id: 1, title: "Srinagar Paradise", image: "Houseboats,_Dal_Lake,_Kashmir.jpg", cat: "Lakes", cost: "₹18,500", desc: "Shikara rides, Mughal gardens, and cold mountain breezes." },
+            { id: 2, title: "Haridwar Holy City", image: "GettyImages-450780637_Darkroom-1aa87b7388274f03a8bc49e7b2148f3a.jpg", cat: "Spiritual", cost: "₹6,000", desc: "Experience the grand evening Ganga Aarti at Har Ki Pauri." },
+            { id: 3, title: "Kedarnath Trek", image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800", cat: "Adventure", cost: "₹14,200", desc: "A sacred journey to the Himalayas. High altitude spiritual trek." },
+            { id: 4, title: "Ayodhya Dham", image: "image1-Ba8DVp46.png", cat: "Heritage", cost: "₹9,500", desc: "Explore the historic Ram Janmabhoomi and Saryu River ghats." }
+        ];
+
+        // Render Trips
+        const tripGrid = document.getElementById('tripGrid');
+        tripGrid.innerHTML = trips.map(t => `
+            <div class="trip-card" onclick="openTrip(${t.id})">
+                <img src="${t.image}" alt="${t.title}">
+                <div class="trip-info">
+                    <span class="badge">${t.cat}</span>
+                    <h3>${t.title}</h3>
+                    <p>Starting at <strong>${t.cost}</strong></p>
+                </div>
+            </div>
+        `).join('');
+
+        // Modal Logic
+        const modal = document.getElementById('tripModal');
+        const modalData = document.getElementById('modalData');
+        window.openTrip = function(id) {
+            const t = trips.find(trip => trip.id === id);
+            modalData.innerHTML = `
+                <h2>${t.title}</h2>
+                <img src="${t.image}" style="width:100%; border-radius:10px; height:250px; object-fit:cover; margin-bottom:15px;">
+                <p>${t.desc}</p>
+                <p><strong>Package:</strong> 3 Days / 2 Nights</p>
+                <button class="submit-btn" style="background:var(--success)" onclick="alert('Proceeding to Payment...')">Book Now for ${t.cost}</button>
+            `;
+            modal.style.display = "block";
+        }
+
+        document.getElementById('closeModal').onclick = () => modal.style.display = "none";
+
+        // Contact Form Logic
+        document.getElementById('contactForm').onsubmit = (e) => {
+            e.preventDefault();
+            alert("Thank you for your message! Our travel expert will contact you within 24 hours.");
+            e.target.reset();
+        };
+
+        // Close modal on outside click
+        window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
+    </script>
+</body>
+</html>
